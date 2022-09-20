@@ -11,15 +11,15 @@
     "start": "vite"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.1",
-    "@preact/preset-vite": "^2.4.0",
+    "@babel/core": "7.19.1",
+    "@preact/preset-vite": "2.4.0",
     "@typescript-eslint/eslint-plugin": "5.38.0",
     "@typescript-eslint/parser": "5.38.0",
     "eslint": "8.23.1",
     "eslint-config-prettier": "8.5.0",
     "eslint-import-resolver-typescript": "3.5.1",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-jsonc": "^2.4.0",
+    "eslint-plugin-jsonc": "2.4.0",
     "eslint-plugin-jsx-a11y": "6.6.1",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react": "7.31.8",
@@ -32,7 +32,7 @@
   },
   "packageManager": "pnpm@7.12.1",
   "dependencies": {
-    "@preact/signals": "^1.0.4",
-    "preact": "^10.11.0"
+    "@preact/signals": "1.0.4",
+    "preact": "10.11.0"
   }
 }
