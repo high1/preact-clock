@@ -35,7 +35,7 @@ export const ClockFace = () => {
           })).map(({ isHour }, index, { length }) => (
             <Hand
               key={index}
-              transform={{ value: rotate(index / length, 0) }}
+              transform={rotate(index / length, 0)}
               className={
                 isHour
                   ? 'stroke-neutral-800 @dark:stroke-neutral-200 stroke-width-2'
