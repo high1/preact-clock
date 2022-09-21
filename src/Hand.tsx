@@ -5,8 +5,7 @@ type HandProps = {
   length: number;
   limit?: number;
   stationary?: boolean;
-  // transform: ReadonlySignal<string>;
-  transform: Pick<ReadonlySignal<string>, 'value'>;
+  transform?: ReadonlySignal<string> | string;
 } & Omit<JSX.SVGAttributes<SVGLineElement>, 'transform'>;
 
 export const Hand = ({
@@ -14,12 +13,14 @@ export const Hand = ({
   length = 0,
   limit = 94,
   stationary,
-  transform: { value },
+  transform,
   ...rest
 }: HandProps) => (
   <line
     className={`stroke-cap-round ${className}`}
-    transform={value}
+    // https://github.com/preactjs/signals/issues/106
+    // @ts-expect-error Type 'ReadonlySignal<string>' is not assignable to type 'string'.ts(2322)
+    transform={transform}
     y1={stationary ? length - limit : undefined}
     y2={-(stationary ? limit : length)}
     {...rest}
