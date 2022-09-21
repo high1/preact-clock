@@ -1,5 +1,4 @@
-import { useEffect } from 'preact/hooks';
-import { useComputed, useSignal } from '@preact/signals';
+import { useComputed, useSignal, useSignalEffect } from '@preact/signals';
 import { Hand } from 'Hand';
 
 const getSecondsSinceMidnight = (): number =>
@@ -14,13 +13,13 @@ export const ClockFace = () => {
   const minutes = useComputed(() => rotate(((time.value / 60) % 60) / 60));
   const hours = useComputed(() => rotate(((time.value / 60 / 60) % 12) / 12));
 
-  useEffect(() => {
+  useSignalEffect(() => {
     let frame = requestAnimationFrame(function loop() {
       time.value = getSecondsSinceMidnight();
       frame = requestAnimationFrame(loop);
     });
     return () => cancelAnimationFrame(frame);
-  }, [time]);
+  });
 
   return (
     <div className="flex items-center justify-center h-full @dark:bg-neutral-700">
