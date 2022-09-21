@@ -1,9 +1,9 @@
 {
   "type": "module",
-  "name": "react-clock",
+  "name": "preact-clock",
   "version": "1.0.0",
   "keywords": [],
-  "description": "reactjs clock, inspired by sauron clock, credits to voby",
+  "description": "preact clock, inspired by sauron clock",
   "scripts": {
     "build": "vite build",
     "dev": "vite",
