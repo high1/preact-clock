@@ -18,6 +18,12 @@
         "plugin:jsonc/recommended-with-json",
         "plugin:prettier/recommended"
       ],
+      "rules": {
+        "react/no-unknown-property": [
+          "error",
+          { "ignore": ["class", "stroke-linecap"] }
+        ]
+      },
       "env": {
         "browser": true,
         "es2022": true
