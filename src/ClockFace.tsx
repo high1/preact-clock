@@ -1,13 +1,12 @@
 import { useComputed, useSignal, useSignalEffect } from '@preact/signals';
-import { Hand } from 'Hand';
-
-const getSecondsSinceMidnight = (): number =>
-  (Date.now() - new Date().setHours(0, 0, 0, 0)) / 1000;
-const rotate = (rotate: number, fractionDigits = 1) =>
-  `rotate(${(rotate * 360).toFixed(fractionDigits)})`;
+import { ClockHand } from 'ClockHand';
 
 export const ClockFace = () => {
+  const getSecondsSinceMidnight = (): number =>
+    (Date.now() - new Date().setHours(0, 0, 0, 0)) / 1000;
   const time = useSignal(getSecondsSinceMidnight());
+  const rotate = (rotate: number, fractionDigits = 1) =>
+    `rotate(${(rotate * 360).toFixed(fractionDigits)})`;
   const miliseconds = useComputed(() => rotate(time.value % 1, 0));
   const seconds = useComputed(() => rotate((time.value % 60) / 60));
   const minutes = useComputed(() => rotate(((time.value / 60) % 60) / 60));
@@ -32,10 +31,10 @@ export const ClockFace = () => {
           {Array.from({ length: 60 }, (_, index) => ({
             isHour: index % 5 === 0,
           })).map(({ isHour }, index, { length }) => (
-            <Hand
+            <ClockHand
               key={index}
               transform={rotate(index / length, 0)}
-              className={
+              class={
                 isHour
                   ? 'stroke-neutral-800 @dark:stroke-neutral-200 stroke-width-2'
                   : 'stroke-neutral-400 @dark:stroke-neutral-600'
@@ -46,24 +45,24 @@ export const ClockFace = () => {
           ))}
         </g>
         <g className="translate-100px">
-          <Hand
+          <ClockHand
             transform={miliseconds}
-            className="stroke-neutral-200 @dark:stroke-neutral-600 stroke-width-5 will-change-transform"
+            class="stroke-neutral-200 @dark:stroke-neutral-600 stroke-width-5 will-change-transform"
             length={83}
           />
-          <Hand
+          <ClockHand
             transform={hours}
-            className="stroke-neutral-800 @dark:stroke-neutral-200 stroke-width-4"
+            class="stroke-neutral-800 @dark:stroke-neutral-200 stroke-width-4"
             length={50}
           />
-          <Hand
+          <ClockHand
             transform={minutes}
-            className="stroke-neutral-800 @dark:stroke-neutral-200 stroke-width-3"
+            class="stroke-neutral-800 @dark:stroke-neutral-200 stroke-width-3"
             length={70}
           />
-          <Hand
+          <ClockHand
             transform={seconds}
-            className="stroke-red-500 stroke-width-2"
+            class="stroke-red-500 stroke-width-2"
             length={77}
           />
         </g>
