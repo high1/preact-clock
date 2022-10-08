@@ -1,10 +1,13 @@
 import { useComputed, useSignal, useSignalEffect } from '@preact/signals';
 import { ClockHand } from 'ClockHand';
 
+const length = 60;
+
 export const ClockFace = () => {
   const getSecondsSinceMidnight = (): number =>
     (Date.now() - new Date().setHours(0, 0, 0, 0)) / 1000;
   const time = useSignal(getSecondsSinceMidnight());
+
   const rotate = (rotate: number, fractionDigits = 1) =>
     `rotate(${(rotate * 360).toFixed(fractionDigits)})`;
   const miliseconds = useComputed(() => rotate(time.value % 1, 0));
@@ -28,9 +31,9 @@ export const ClockFace = () => {
             className="stroke-neutral-900 @dark:stroke-neutral-100 fill-none"
             r="99"
           />
-          {Array.from({ length: 60 }, (_, index) => ({
+          {Array.from({ length }, (_, index) => ({
             isHour: index % 5 === 0,
-          })).map(({ isHour }, index, { length }) => (
+          })).map(({ isHour }, index) => (
             <ClockHand
               key={index}
               transform={rotate(index / length, 0)}
