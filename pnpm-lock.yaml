@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@babel/core': 7.19.3
   '@preact/preset-vite': 2.4.0
-  '@preact/signals': 1.1.1
+  '@preact/signals': 1.1.2
   '@typescript-eslint/eslint-plugin': 5.40.0
   '@typescript-eslint/parser': 5.40.0
   eslint: 8.25.0
@@ -23,7 +23,7 @@ specifiers:
   vite-tsconfig-paths: 3.5.1
 
 dependencies:
-  '@preact/signals': 1.1.1_preact@10.11.1
+  '@preact/signals': 1.1.2_preact@10.11.1
   preact: 10.11.1
 
 devDependencies:
@@ -502,16 +502,16 @@ packages:
       - supports-color
     dev: true
 
-  /@preact/signals-core/1.2.0:
-    resolution: {integrity: sha512-GBjq/8WJkh/aenrEMvWIOr1lRfu6nb25er0m6r+4qVqKC85mXAYIbGHnoHTooNXCKxn2KEMUrATvN54MdMHE1A==}
+  /@preact/signals-core/1.2.2:
+    resolution: {integrity: sha512-z3/bCj7rRA21RJb4FeJ4guCrD1CQbaURHkCTunUWQpxUMAFOPXCD8tSFqERyGrrcSb4T3Hrmdc1OAl0LXBHwiw==}
     dev: false
 
-  /@preact/signals/1.1.1_preact@10.11.1:
-    resolution: {integrity: sha512-I1DhYo2d1t9qDkEq1jYDVTQdBGmo4NlqatNEtulsS/87kVdwhZluP6TTDS4/5sc2h86TlBF6UA6LO+tDpIt/Gw==}
+  /@preact/signals/1.1.2_preact@10.11.1:
+    resolution: {integrity: sha512-MLNNrICSllHBhpXBvXbl7K5L1HmIjuTzgBw+zdODqjM/cLGPXdYiAWt4lqXlrxNavYdoU4eljb+TLE+DRL+6yw==}
     peerDependencies:
       preact: 10.x
     dependencies:
-      '@preact/signals-core': 1.2.0
+      '@preact/signals-core': 1.2.2
       preact: 10.11.1
     dev: false
 
