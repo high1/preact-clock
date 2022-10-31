@@ -5,14 +5,5 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   base: '/preact-clock/',
-  esbuild: {
-    logOverride: { 'this-is-undefined-in-esm': 'silent' },
-  },
   plugins: [preact(), uno(), tsconfigPaths()],
-  optimizeDeps: {
-    disabled: false,
-  },
-  build: {
-    commonjsOptions: { include: [] },
-  },
 });
