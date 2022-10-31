@@ -7,7 +7,6 @@
     "esModuleInterop": false,
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-    "types": ["vite/client"],
     "noEmit": true,
     "isolatedModules": true,
     "baseUrl": "src",
