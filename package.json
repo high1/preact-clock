@@ -13,26 +13,26 @@
   "devDependencies": {
     "@babel/core": "7.20.2",
     "@preact/preset-vite": "2.4.0",
-    "@typescript-eslint/eslint-plugin": "5.42.1",
-    "@typescript-eslint/parser": "5.42.1",
-    "eslint": "8.27.0",
+    "@typescript-eslint/eslint-plugin": "5.43.0",
+    "@typescript-eslint/parser": "5.43.0",
+    "eslint": "8.28.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-import-resolver-typescript": "3.5.2",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jsonc": "2.5.0",
     "eslint-plugin-jsx-a11y": "6.6.1",
     "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-react": "7.31.10",
+    "eslint-plugin-react": "7.31.11",
     "eslint-plugin-react-hooks": "4.6.0",
     "prettier": "2.7.1",
-    "typescript": "4.8.4",
+    "typescript": "4.9.3",
     "unocss": "0.46.5",
-    "vite": "3.2.3",
-    "vite-tsconfig-paths": "3.5.2"
+    "vite": "3.2.4",
+    "vite-tsconfig-paths": "3.6.0"
   },
   "dependencies": {
     "@preact/signals": "1.1.2",
-    "preact": "10.11.2"
+    "preact": "10.11.3"
   },
-  "packageManager": "pnpm@7.15.0"
+  "packageManager": "pnpm@7.17.0"
 }
