@@ -2,24 +2,27 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": false,
+    "isolatedModules": true,
+    "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-    "noEmit": true,
-    "isolatedModules": true,
     "baseUrl": "src",
     "skipLibCheck": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "importsNotUsedAsValues": "error",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "importsNotUsedAsValues": "error"
+    "exactOptionalPropertyTypes": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noPropertyAccessFromIndexSignature": true
   },
-  "include": ["src", "*.config.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "*.config.ts"]
 }

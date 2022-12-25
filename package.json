@@ -7,12 +7,14 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
+    "prebuild": "eslint . --max-warnings=0 && tsc",
     "preview": "vite preview",
     "start": "vite"
   },
   "devDependencies": {
     "@babel/core": "7.20.5",
     "@preact/preset-vite": "2.4.0",
+    "@types/node": "^18.11.17",
     "@typescript-eslint/eslint-plugin": "5.46.0",
     "@typescript-eslint/parser": "5.46.0",
     "eslint": "8.29.0",
