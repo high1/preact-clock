@@ -1,10 +1,10 @@
 import type { JSX } from 'preact';
 
-type ClockHandProps = {
+interface ClockHandProps extends JSX.SVGAttributes<SVGLineElement> {
   length: number;
   limit?: number;
   stationary?: boolean;
-} & JSX.SVGAttributes<SVGLineElement>;
+}
 
 export const ClockHand = ({
   length = 0,
@@ -13,7 +13,7 @@ export const ClockHand = ({
   ...rest
 }: ClockHandProps) => (
   <line
-    y1={stationary ? length - limit : undefined}
+    {...(stationary && { y1: length - limit })}
     y2={-(stationary ? limit : length)}
     stroke-linecap={'round'}
     {...rest}
