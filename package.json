@@ -24,18 +24,18 @@
     "eslint-plugin-jsonc": "2.9.0",
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-react": "7.32.2",
+    "eslint-plugin-react": "7.33.0",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-yml": "^1.4.0",
     "prettier": "2.8.8",
     "typescript": "4.9.5",
-    "unocss": "0.53.5",
-    "vite": "4.4.4",
+    "unocss": "0.53.6",
+    "vite": "4.4.6",
     "vite-tsconfig-paths": "4.2.0"
   },
   "dependencies": {
     "@preact/signals": "1.1.5",
     "preact": "10.16.0"
   },
-  "packageManager": "pnpm@7.33.3"
+  "packageManager": "pnpm@7.33.5"
 }
