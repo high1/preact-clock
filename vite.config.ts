@@ -1,10 +1,23 @@
-import { defineConfig, loadEnv, type ConfigEnv } from 'vite';
-import preact from '@preact/preset-vite';
-import uno from 'unocss/vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
+import { preact } from '@preact/preset-vite';
+import tailwindcss from '@tailwindcss/vite';
+import { type ConfigEnv, defineConfig, loadEnv } from 'vite';
+import { checker } from 'vite-plugin-checker';
 
 export default ({ mode }: ConfigEnv) =>
   defineConfig({
     base: loadEnv(mode, process.cwd(), '')['BASE'] ?? '',
-    plugins: [preact(), uno(), tsconfigPaths()],
+    plugins: [
+      preact(),
+      tailwindcss(),
+      checker({
+        eslint: {
+          lintCommand: 'eslint . --max-warnings 0',
+          useFlatConfig: true,
+        },
+        typescript: true,
+      }),
+    ],
+    resolve: {
+      tsconfigPaths: true,
+    },
   });
