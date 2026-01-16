@@ -37,8 +37,7 @@ export const ClockHands = () => (
       class="stroke-zinc-600 stroke-4 dark:stroke-zinc-200"
       length={46}
       transform={hour}
-    />{' '}
-    le
+    />
     <ClockHand
       class="stroke-zinc-400 stroke-3"
       length={64}
