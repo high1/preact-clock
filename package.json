@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@preact/signals": "2.5.1",
-    "preact": "11.0.0-beta.0"
+    "preact": "10.28.2"
   },
   "packageManager": "pnpm@10.28.0",
   "pnpm": {
