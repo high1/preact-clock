@@ -63,6 +63,11 @@ export default defineConfig(
         { ignore: ['class', 'stroke-linecap'] },
       ],
     },
+    settings: {
+      react: {
+        version: '19',
+      },
+    },
   },
   {
     extends: [

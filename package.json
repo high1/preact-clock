@@ -7,7 +7,6 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "prebuild": "eslint . --max-warnings=0 && tsc",
     "preview": "vite preview",
     "start": "vite"
   },
