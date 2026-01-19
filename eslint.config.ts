@@ -79,9 +79,9 @@ export default defineConfig(
   },
   {
     extends: [
-      yml.configs['flat/recommended'],
+      yml.configs.recommended,
       prettierRecommended,
-      yml.configs['flat/prettier'],
+      yml.configs.prettier,
     ],
     files: ['**/*.{yml,yaml}'],
   },
