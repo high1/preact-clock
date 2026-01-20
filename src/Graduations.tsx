@@ -4,8 +4,8 @@ import { rotate, seconds } from '@/common';
 // For not used because Graduations are static - minor optimization
 export const Graduations = () =>
   [...Array(seconds).keys()]
-    .map<[boolean, number]>((index) => [index % 5 === 0, index])
-    .map(([isHour, index]) => (
+    .map((index) => ({ index, isHour: index % 5 === 0 }))
+    .map(({ index, isHour }) => (
       <Graduation
         class={
           isHour
