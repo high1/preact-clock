@@ -41,7 +41,7 @@
     "vite-plugin-checker": "0.12.0"
   },
   "dependencies": {
-    "@preact/signals": "2.5.1",
+    "@preact/signals": "2.6.0",
     "preact": "10.28.2"
   },
   "packageManager": "pnpm@10.28.1",
