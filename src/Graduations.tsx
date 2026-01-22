@@ -1,7 +1,6 @@
 import { ClockLine as Graduation } from '@/ClockLine';
 import { rotate, seconds } from '@/common';
 
-// For not used because Graduations are static - minor optimization
 export const Graduations = () =>
   [...Array(seconds).keys()]
     .map((index) => ({ index, isHour: index % 5 === 0 }))

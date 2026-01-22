@@ -18,14 +18,13 @@ export const ClockHands = () => (
     <ClockHand
       class="stroke-zinc-200 stroke-3 dark:stroke-zinc-600"
       length={82}
-      transform={time.milisecond}
+      transform={time.subsecond}
     />
     <ClockHand
       class="stroke-zinc-600 stroke-4 dark:stroke-zinc-200"
       length={46}
       transform={time.hour}
-    />{' '}
-    le
+    />
     <ClockHand
       class="stroke-zinc-400 stroke-3"
       length={64}
