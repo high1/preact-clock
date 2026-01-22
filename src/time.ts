@@ -14,9 +14,6 @@ export const time = {
       rotate(((clock.value / seconds ** 2) % hours) / hours),
     );
   },
-  get milisecond() {
-    return computed(() => rotate(clock.value % 1, 0));
-  },
   get minute() {
     return computed(() =>
       rotate(((clock.value / seconds) % seconds) / seconds),
@@ -24,6 +21,9 @@ export const time = {
   },
   get second() {
     return computed(() => rotate((clock.value % seconds) / seconds));
+  },
+  get subsecond() {
+    return computed(() => rotate(clock.value % 1, 0));
   },
   update: () => {
     clock.value = getSecondsSinceMidnight();
