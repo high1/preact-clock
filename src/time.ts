@@ -3,7 +3,7 @@ import { computed, signal } from '@preact/signals';
 import { rotate, seconds } from '@/common';
 
 const hours = seconds / 5;
-const getSecondsSinceMidnight = (): number =>
+const getSecondsSinceMidnight = () =>
   (Date.now() - new Date().setHours(0, 0, 0, 0)) / 1000;
 
 const clock = signal(getSecondsSinceMidnight());
