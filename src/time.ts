@@ -9,23 +9,9 @@ const getSecondsSinceMidnight = (): number =>
 const clock = signal(getSecondsSinceMidnight());
 
 export const time = {
-  get hour() {
-    return computed(() =>
-      rotate(((clock.value / seconds ** 2) % hours) / hours),
-    );
-  },
-  get minute() {
-    return computed(() =>
-      rotate(((clock.value / seconds) % seconds) / seconds),
-    );
-  },
-  get second() {
-    return computed(() => rotate((clock.value % seconds) / seconds));
-  },
-  get subsecond() {
-    return computed(() => rotate(clock.value % 1, 0));
-  },
-  update: () => {
-    clock.value = getSecondsSinceMidnight();
-  },
+  hour: computed(() => rotate(((clock.value / seconds ** 2) % hours) / hours)),
+  minute: computed(() => rotate(((clock.value / seconds) % seconds) / seconds)),
+  second: computed(() => rotate((clock.value % seconds) / seconds)),
+  subsecond: computed(() => rotate(clock.value % 1, 0)),
+  update: () => (clock.value = getSecondsSinceMidnight()),
 };
