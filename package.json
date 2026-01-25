@@ -17,7 +17,7 @@
     "@eslint/js": "9.39.2",
     "@html-eslint/eslint-plugin": "0.53.0",
     "@preact/preset-vite": "2.10.2",
-    "@stylistic/eslint-plugin": "5.7.0",
+    "@stylistic/eslint-plugin": "5.7.1",
     "@tailwindcss/vite": "4.1.18",
     "@types/eslint-plugin-jsx-a11y": "6.10.1",
     "@types/node": "25.0.10",
@@ -37,7 +37,7 @@
     "tailwindcss": "4.1.18",
     "typescript": "5.9.3",
     "typescript-eslint": "8.53.1",
-    "vite": "8.0.0-beta.8",
+    "vite": "8.0.0-beta.10",
     "vite-plugin-checker": "0.12.0"
   },
   "dependencies": {
