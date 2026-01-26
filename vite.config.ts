@@ -7,7 +7,7 @@ export default ({ mode }: ConfigEnv) =>
   defineConfig({
     base: loadEnv(mode, process.cwd(), '')['BASE'] ?? '',
     plugins: [
-      preact(),
+      preact({ prefreshEnabled: mode === 'development' }),
       tailwindcss(),
       checker({
         eslint: {
