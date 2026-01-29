@@ -4,13 +4,10 @@ import { ClockLine as ClockHand } from '@/ClockLine';
 import { time } from '@/time';
 
 effect(() => {
-  let frame = requestAnimationFrame(function loop() {
+  requestAnimationFrame(function loop() {
     time.update();
-    frame = requestAnimationFrame(loop);
+    requestAnimationFrame(loop);
   });
-  return () => {
-    cancelAnimationFrame(frame);
-  };
 });
 
 export const ClockHands = () => (
