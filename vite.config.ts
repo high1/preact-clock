@@ -19,20 +19,4 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     tsconfigPaths: true,
   },
-  // test: {
-  //   alias: {
-  //     '@/': new URL('./src/', import.meta.url).pathname,
-  //   },
-  //   browser: {
-  //     enabled: true,
-  //     headless: true,
-  //     instances: [{ browser: 'chromium' }],
-  //     provider: playwright(),
-  //     screenshotFailures: false,
-  //   },
-  //   coverage: {
-  //     exclude: ['./src/index.css'],
-  //   },
-  //   environment: 'happy-dom',
-  // },
 }));
