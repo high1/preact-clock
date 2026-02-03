@@ -4,6 +4,7 @@ import css from '@eslint/css';
 import eslint from '@eslint/js';
 import html from '@html-eslint/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { importX } from 'eslint-plugin-import-x';
 import jsonc from 'eslint-plugin-jsonc';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
@@ -64,6 +65,7 @@ export default defineConfig(
       ],
     },
     settings: {
+      'import-x/resolver-next': [createTypeScriptImportResolver()],
       react: {
         version: '19',
       },
