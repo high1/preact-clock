@@ -1,14 +1,5 @@
-import { effect } from '@preact/signals';
-
 import { ClockLine as ClockHand } from '@/ClockLine';
 import { time } from '@/time';
-
-effect(() => {
-  requestAnimationFrame(function loop() {
-    time.update();
-    requestAnimationFrame(loop);
-  });
-});
 
 export const ClockHands = () => (
   <>
