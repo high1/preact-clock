@@ -1,4 +1,4 @@
-import { computed, createModel, effect, signal } from '@preact/signals';
+import { computed, createModel, signal } from '@preact/signals';
 
 import { rotate, seconds } from '@/common';
 
@@ -10,11 +10,9 @@ const TimeModel = createModel(() => {
   const clock = signal(getSecondsSinceMidnight());
   const update = () => (clock.value = getSecondsSinceMidnight());
 
-  effect(() => {
-    requestAnimationFrame(function loop() {
-      update();
-      requestAnimationFrame(loop);
-    });
+  requestAnimationFrame(function loop() {
+    update();
+    requestAnimationFrame(loop);
   });
 
   return {
