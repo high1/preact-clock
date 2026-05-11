@@ -1,19 +1,19 @@
-import { ClockHands } from '@/ClockHands';
-import { Graduations } from '@/Graduations';
-import { getTestId } from '@/utilities';
+import { ClockHands } from '#src/ClockHands';
+import { Graduations } from '#src/Graduations';
+import { getTestId } from '#src/utilities';
 
 export const ClockFace = () => (
   <div
-    className="grid h-screen place-content-center dark:bg-zinc-800"
+    class="grid h-screen place-content-center dark:bg-zinc-800"
     data-testid={getTestId('clock-face')}
   >
-    <svg className="h-[95vmin]" viewBox="0 0 200 200">
+    <svg class="h-[95vmin]" viewBox="0 0 200 200">
       <image class="size-1/6 translate-5/12" href="logo.svg" />
       <g class="translate-1/2">
         <circle class="fill-none stroke-zinc-600 dark:stroke-zinc-200" r="98" />
         <Graduations />
       </g>
-      <g className="translate-1/2">
+      <g class="translate-1/2">
         <ClockHands />
       </g>
     </svg>

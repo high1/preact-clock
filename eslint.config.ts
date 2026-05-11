@@ -1,17 +1,17 @@
 /* eslint-disable import-x/no-named-as-default-member */
-import { includeIgnoreFile } from '@eslint/compat';
+import e18e from '@e18e/eslint-plugin';
+import react from '@eslint-react/eslint-plugin';
+import { includeIgnoreFile } from '@eslint/config-helpers';
 import css from '@eslint/css';
 import eslint from '@eslint/js';
+import json from '@eslint/json';
 import html from '@html-eslint/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { importX } from 'eslint-plugin-import-x';
-import jsonc from 'eslint-plugin-jsonc';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import perfectionist from 'eslint-plugin-perfectionist';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
 import yml from 'eslint-plugin-yml';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import { fileURLToPath } from 'node:url';
@@ -37,15 +37,10 @@ export default defineConfig(
       eslint.configs.recommended,
       tseslint.configs.strictTypeChecked,
       tseslint.configs.stylisticTypeChecked,
+      e18e.configs.recommended,
       jsxA11y.flatConfigs.strict,
-      // @ts-expect-error Types of property languageOptions are incompatible. (ts 2322)
-      react.configs.flat['recommended'],
-      // @ts-expect-error Types of property languageOptions are incompatible. (ts 2322)
-      react.configs.flat['jsx-runtime'],
-      reactHooks.configs.flat.recommended,
-      // @ts-expect-error Types of property languageOptions are incompatible. (ts 2322)
+      react.configs['strict-type-checked'],
       importX.flatConfigs.recommended,
-      // @ts-expect-error Types of property languageOptions are incompatible. (ts 2322)
       importX.flatConfigs.typescript,
       stylistic.configs.customize({
         semi: true,
@@ -59,25 +54,16 @@ export default defineConfig(
         'error',
         { allowNumber: true },
       ],
-      'react/no-unknown-property': [
-        'error',
-        { ignore: ['class', 'stroke-linecap'] },
-      ],
     },
     settings: {
       'import-x/resolver-next': [createTypeScriptImportResolver()],
-      react: {
-        version: '19',
-      },
     },
   },
   {
-    extends: [
-      jsonc.configs['flat/recommended-with-jsonc'],
-      prettierRecommended,
-      jsonc.configs['flat/prettier'],
-    ],
+    extends: [json.configs.recommended, prettierRecommended],
     files: ['**/*.json'],
+    language: 'json/json',
+    rules: { 'json/sort-keys': ['error', 'asc', { natural: true }] },
   },
   {
     extends: [
@@ -88,19 +74,17 @@ export default defineConfig(
     files: ['**/*.{yml,yaml}'],
   },
   {
-    extends: ['css/recommended', prettierRecommended],
+    extends: [css.configs.recommended, prettierRecommended],
     files: ['**/*.css'],
     language: 'css/css',
-    plugins: { css },
     rules: {
       'css/no-invalid-at-rules': 'off',
     },
   },
   {
-    extends: ['html/recommended'],
+    extends: [html.configs.recommended],
     files: ['**/*.html'],
     language: 'html/html',
-    plugins: { html },
     rules: {
       'html/attrs-newline': [
         'error',

@@ -4,8 +4,7 @@ import { describe, expect, test, vi } from 'vitest';
 describe('index', () => {
   test('render was called', async () => {
     vi.mock('preact', { spy: true });
-    await import('@/index');
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
+    await import('#src/index');
     expect(render).toHaveBeenCalledWith(expect.any(Object), document.body);
   });
 });
