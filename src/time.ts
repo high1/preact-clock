@@ -1,6 +1,6 @@
 import { computed, createModel, signal } from '@preact/signals';
 
-import { rotate, seconds } from '@/common';
+import { rotate, seconds } from '#src/common';
 
 const hours = seconds / 5;
 const getSecondsSinceMidnight = () =>

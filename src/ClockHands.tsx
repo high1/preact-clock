@@ -1,5 +1,5 @@
-import { ClockLine as ClockHand } from '@/ClockLine';
-import { time } from '@/time';
+import { ClockLine as ClockHand } from '#src/ClockLine';
+import { time } from '#src/time';
 
 export const ClockHands = () => (
   <>

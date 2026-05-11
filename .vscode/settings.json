@@ -1,4 +1,5 @@
 {
+  "css.customData": ["./.vscode/tailwind.json"],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
@@ -12,5 +13,7 @@
     "typescriptreact",
     "yaml"
   ],
-  "css.customData": ["./.vscode/tailwind.json"]
+  "json.schemaDownload.trustedDomains": {
+    "https://docs.renovatebot.com/renovate-schema.json": true
+  }
 }
