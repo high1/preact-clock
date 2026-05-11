@@ -32,8 +32,8 @@ jobs:
       - name: Install 🔧
         run: pnpm i
 
-      - name: Install playwright 🌐
-        run: pnpm dlx playwright install --only-shell chromium
+      # - name: Install playwright 🌐
+      #   run: pnpm dlx playwright install --only-shell chromium
 
       - name: Build 🚧
         run: |
