@@ -32,7 +32,7 @@ jobs:
       - name: Install 🔧
         run: |
           pnpm i
-          pnpm playwright
+          pnpm dlx playwright install --only-shell chromium
 
       - name: Build 🚧
         run: |
