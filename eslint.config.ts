@@ -1,10 +1,10 @@
 /* eslint-disable import-x/no-named-as-default-member */
 import e18e from '@e18e/eslint-plugin';
 import react from '@eslint-react/eslint-plugin';
-import { includeIgnoreFile } from '@eslint/config-helpers';
 import css from '@eslint/css';
 import eslint from '@eslint/js';
 import json from '@eslint/json';
+import markdown from '@eslint/markdown';
 import html from '@html-eslint/eslint-plugin';
 import stylistic from '@stylistic/eslint-plugin';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
@@ -13,7 +13,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import perfectionist from 'eslint-plugin-perfectionist';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import yml from 'eslint-plugin-yml';
-import { defineConfig, globalIgnores } from 'eslint/config';
+import { defineConfig, globalIgnores, includeIgnoreFile } from 'eslint/config';
 import { fileURLToPath } from 'node:url';
 import tseslint from 'typescript-eslint';
 
@@ -93,5 +93,10 @@ export default defineConfig(
       'html/indent': ['error', 2],
       'html/no-trailing-spaces': 'error',
     },
+  },
+  {
+    extends: [markdown.configs.recommended, prettierRecommended],
+    files: ['**/*.md'],
+    language: 'markdown/commonmark',
   },
 );
