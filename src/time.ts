@@ -3,12 +3,12 @@ import { computed, createModel, signal } from '@preact/signals';
 import { rotate, seconds } from '#src/common';
 
 const hours = seconds / 5;
-const getSecondsSinceMidnight = () =>
-  (Date.now() - new Date().setHours(0, 0, 0, 0)) / 1000;
+const getSecondsSinceMidnight = (date: Date) =>
+  (date.getTime() - date.setHours(0, 0, 0, 0)) / 1000;
 
 const TimeModel = createModel(() => {
-  const clock = signal(getSecondsSinceMidnight());
-  const update = () => (clock.value = getSecondsSinceMidnight());
+  const clock = signal(getSecondsSinceMidnight(new Date()));
+  const update = () => (clock.value = getSecondsSinceMidnight(new Date()));
 
   requestAnimationFrame(function loop() {
     update();

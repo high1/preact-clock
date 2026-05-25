@@ -3,12 +3,14 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
+  "eslint.runtime": "node",
   "eslint.validate": [
     "css",
     "html",
     "javascript",
     "json",
     "jsonc",
+    "markdown",
     "typescript",
     "typescriptreact",
     "yaml"
