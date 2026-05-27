@@ -23,11 +23,6 @@ export default defineConfig(
   {
     languageOptions: {
       parserOptions: {
-        ...jsxA11y.flatConfigs.strict.languageOptions,
-        ecmaFeatures: {
-          jsx: true,
-        },
-        extraFileExtensions: ['.css'],
         projectService: true,
       },
     },
@@ -49,6 +44,14 @@ export default defineConfig(
       prettierRecommended,
     ],
     files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        ...jsxA11y.flatConfigs.strict.languageOptions,
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
     rules: {
       '@typescript-eslint/restrict-template-expressions': [
         'error',
