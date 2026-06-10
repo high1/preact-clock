@@ -1,5 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "datasourceTemplate": "npm",
+      "fileMatch": ["^package\\.json$"],
+      "matchStrings": [
+        "\"devEngines\"\\s*:\\s*\\{[\\s\\S]*?\"packageManager\"\\s*:\\s*\"(?<depName>[a-zA-Z0-9-]+)@(?<currentValue>[^\"]+)\""
+      ]
+    }
+  ],
   "extends": ["config:recommended", "schedule:weekly"],
   "ignoreDeps": ["preact"],
   "packageRules": [
@@ -8,10 +18,24 @@
       "automergeType": "pr",
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
+      "internalChecksFilter": "strict",
       "matchPackageNames": ["*"],
       "matchUpdateTypes": ["minor", "patch"],
       "minimumReleaseAge": "1 days",
       "platformAutomerge": true
+    },
+    {
+      "additionalBranchPrefix": "pnpm-toolchain-",
+      "groupName": "pnpm-toolchain-sync",
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": ["pnpm"],
+      "rangeStrategy": "update-lockfile"
+    },
+    {
+      "enabled": true,
+      "groupName": "pnpm-toolchain-sync",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["pnpm"]
     }
   ],
   "timezone": "Etc/UTC"
