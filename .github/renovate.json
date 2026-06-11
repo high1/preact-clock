@@ -4,7 +4,9 @@
     {
       "customType": "regex",
       "datasourceTemplate": "npm",
-      "fileMatch": ["^package\\.json$"],
+      "managerFilePatterns": [
+        "/^package\\.json$/"
+      ],
       "matchStrings": [
         "\"devEngines\"\\s*:\\s*\\{[\\s\\S]*?\"packageManager\"\\s*:\\s*\"(?<depName>[a-zA-Z0-9-]+)@(?<currentValue>[^\"]+)\""
       ]
