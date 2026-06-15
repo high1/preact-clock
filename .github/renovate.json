@@ -2,27 +2,22 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "customManagers": [
     {
-      "$schema": "https://renovatebot.com",
-      "customManagers": [
-        {
-          "customType": "regex",
-          "datasourceTemplate": "npm",
-          "depNameTemplate": "pnpm",
-          "managerFilePatterns": ["/^package\\.json$/"],
-          "matchStrings": [
-            "\"packageManager\"\\s*:\\s*\"pnpm@(?<currentValue>[^\"]+)\""
-          ],
-          "versioningTemplate": "npm"
-        },
-        {
-          "customType": "regex",
-          "datasourceTemplate": "node-version",
-          "depNameTemplate": "node",
-          "managerFilePatterns": ["/^package\\.json$/"],
-          "matchStrings": [
-            "\"runtime\"\\s*:\\s*\\{[\\s\\S]*?\"version\"\\s*:\\s*\"(?<currentValue>(?:>=|<=|>|<|\\^|~)?\\s*\\d+[^\"]*)\""
-          ]
-        }
+      "customType": "regex",
+      "datasourceTemplate": "npm",
+      "depNameTemplate": "pnpm",
+      "managerFilePatterns": ["/^package\\.json$/"],
+      "matchStrings": [
+        "\"packageManager\"\\s*:\\s*\"pnpm@(?<currentValue>[^\"]+)\""
+      ],
+      "versioningTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "node-version",
+      "depNameTemplate": "node",
+      "managerFilePatterns": ["/^package\\.json$/"],
+      "matchStrings": [
+        "\"runtime\"\\s*:\\s*\\{[\\s\\S]*?\"version\"\\s*:\\s*\"(?<currentValue>(?:>=|<=|>|<|\\^|~)?\\s*\\d+[^\"]*)\""
       ]
     }
   ],
