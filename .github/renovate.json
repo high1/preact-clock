@@ -4,10 +4,12 @@
     {
       "customType": "regex",
       "datasourceTemplate": "npm",
-      "fileMatch": ["^package\\.json$"],
+      "depNameTemplate": "pnpm",
+      "managerFilePatterns": ["^package\\.json$"],
       "matchStrings": [
-        "\"devEngines\"\\s*:\\s*\\{[\\s\\S]*?\"packageManager\"\\s*:\\s*\"(?<depName>[a-zA-Z0-9-]+)@(?<currentValue>[^\"]+)\""
-      ]
+        "\"packageManager\"\\s*:\\s*\\{[^}]*\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "versioningTemplate": "npm"
     }
   ],
   "extends": ["config:recommended", "schedule:weekly"],
