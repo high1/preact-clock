@@ -7,10 +7,8 @@
       "depNameTemplate": "pnpm",
       "managerFilePatterns": ["(^|/)package\\.json$"],
       "matchStrings": [
-        "\"devEngines\"\\s*:\\s*\\{([^}]+|\\{[^}]*\\}[^}]*)*\\}",
-        "\"packageManager\"\\s*:\\s*\\{[^}]*?\"name\"\\s*:\\s*\"pnpm\"[^}]*?\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
-      ],
-      "matchStringsStrategy": "combination"
+        "\"packageManager\"\\s*:\\s*\\{[^}]*?\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
+      ]
     },
     {
       "customType": "regex",
@@ -18,10 +16,8 @@
       "depNameTemplate": "node",
       "managerFilePatterns": ["(^|/)package\\.json$"],
       "matchStrings": [
-        "\"devEngines\"\\s*:\\s*\\{([^}]+|\\{[^}]*\\}[^}]*)*\\}",
-        "\"runtime\"\\s*:\\s*\\{[^}]*?\"name\"\\s*:\\s*\"node\"[^}]*?\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
-      ],
-      "matchStringsStrategy": "combination"
+        "\"runtime\"\\s*:\\s*\\{[^}]*?\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
+      ]
     }
   ],
   "extends": ["config:recommended", "schedule:weekly"],
@@ -32,7 +28,6 @@
       "automergeType": "pr",
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
-      "internalChecksFilter": "strict",
       "matchPackageNames": ["*"],
       "matchUpdateTypes": ["minor", "patch"],
       "minimumReleaseAge": "1 days",
@@ -47,10 +42,9 @@
       "matchManagers": ["custom.regex"],
       "minimumReleaseAge": "1 days",
       "platformAutomerge": true,
-      "rangeStrategy": "update-lockfile"
+      "postUpdateOptions": ["pnpmExtractLockfile"]
     },
     {
-      "enabled": true,
       "groupName": "pnpm",
       "matchManagers": ["npm"],
       "matchPackageNames": ["pnpm"]
