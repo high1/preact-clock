@@ -2,26 +2,27 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "customManagers": [
     {
-      "customType": "regex",
-      "datasourceTemplate": "npm",
-      "depNameTemplate": "pnpm",
-      "managerFilePatterns": [
-        "/^package\\.json$/"
-      ],
-      "matchStrings": [
-        "\"packageManager\"\\s*:\\s*\\{[^}]*?\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
-      ],
-      "versioningTemplate": "npm"
-    },
-    {
-      "customType": "regex",
-      "datasourceTemplate": "node-version",
-      "depNameTemplate": "node",
-      "managerFilePatterns": [
-        "/^package\\.json$/"
-      ],
-      "matchStrings": [
-        "\"runtime\"\\s*:\\s*\\{[^}]*?\"version\"\\s*:\\s*\"(?<currentValue>(?:>=|<=|>|<|\\^|~)?\\s*\\d+[^\"]*)\""
+      "$schema": "https://renovatebot.com",
+      "customManagers": [
+        {
+          "customType": "regex",
+          "datasourceTemplate": "npm",
+          "depNameTemplate": "pnpm",
+          "managerFilePatterns": ["/^package\\.json$/"],
+          "matchStrings": [
+            "\"packageManager\"\\s*:\\s*\"pnpm@(?<currentValue>[^\"]+)\""
+          ],
+          "versioningTemplate": "npm"
+        },
+        {
+          "customType": "regex",
+          "datasourceTemplate": "node-version",
+          "depNameTemplate": "node",
+          "managerFilePatterns": ["/^package\\.json$/"],
+          "matchStrings": [
+            "\"runtime\"\\s*:\\s*\\{[\\s\\S]*?\"version\"\\s*:\\s*\"(?<currentValue>(?:>=|<=|>|<|\\^|~)?\\s*\\d+[^\"]*)\""
+          ]
+        }
       ]
     }
   ],
@@ -40,15 +41,15 @@
       "platformAutomerge": true
     },
     {
-      "additionalBranchPrefix": "pnpm-toolchain-",
-      "groupName": "pnpm-toolchain-sync",
+      "additionalBranchPrefix": "pnpm-",
+      "groupName": "pnpm",
       "matchManagers": ["custom.regex"],
       "matchPackageNames": ["pnpm"],
       "rangeStrategy": "update-lockfile"
     },
     {
       "enabled": true,
-      "groupName": "pnpm-toolchain-sync",
+      "groupName": "pnpm",
       "matchManagers": ["npm"],
       "matchPackageNames": ["pnpm"]
     }
