@@ -3,6 +3,7 @@
   "customManagers": [
     {
       "customType": "jsonata",
+      "fileFormat": "json",
       "fileMatch": ["(^|/)package\\.json$"],
       "matchStrings": [
         "($pm := $.devEngines.packageManager; $pm ? ( $isArr := $type($pm) = 'array'; $pmList := $isArr ? $pm : [$pm]; $pnpmObj := $pmList[name='pnpm']; $pnpmObj ? { 'currentValue': $pnpmObj.version, 'depName': 'pnpm', 'datasource': 'npm' } : null ) : null)",
