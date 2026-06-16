@@ -2,21 +2,11 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "customManagers": [
     {
-      "customType": "regex",
-      "datasourceTemplate": "npm",
-      "depNameTemplate": "pnpm",
-      "managerFilePatterns": ["(^|/)package\\.json$"],
+      "customType": "jsonata",
+      "fileMatch": ["(^|/)package\\.json$"],
       "matchStrings": [
-        "\"packageManager\"\\s*:\\s*\\{[^}]*?\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
-      ]
-    },
-    {
-      "customType": "regex",
-      "datasourceTemplate": "node-version",
-      "depNameTemplate": "node",
-      "managerFilePatterns": ["(^|/)package\\.json$"],
-      "matchStrings": [
-        "\"runtime\"\\s*:\\s*\\{[^}]*?\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
+        "($pm := $.devEngines.packageManager; $pm ? ( $isArr := $type($pm) = 'array'; $pmList := $isArr ? $pm : [$pm]; $pnpmObj := $pmList[name='pnpm']; $pnpmObj ? { 'currentValue': $pnpmObj.version, 'depName': 'pnpm', 'datasource': 'npm' } : null ) : null)",
+        "($rt := $.devEngines.runtime; $rt ? ( $isArr := $type($rt) = 'array'; $rtList := $isArr ? $rt : [$rt]; $nodeObj := $rtList[name='node']; $nodeObj ? { 'currentValue': $nodeObj.version, 'depName': 'node', 'datasource': 'node-version' } : null ) : null)"
       ]
     }
   ],
@@ -39,15 +29,10 @@
       "automergeType": "pr",
       "groupName": "pnpm",
       "matchDepNames": ["pnpm", "node"],
-      "matchManagers": ["custom.regex"],
+      "matchManagers": ["custom.jsonata"],
       "minimumReleaseAge": "1 days",
       "platformAutomerge": true,
       "postUpdateOptions": ["pnpmExtractLockfile"]
-    },
-    {
-      "groupName": "pnpm",
-      "matchManagers": ["npm"],
-      "matchPackageNames": ["pnpm"]
     }
   ],
   "timezone": "Etc/UTC"
