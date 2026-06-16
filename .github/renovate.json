@@ -32,8 +32,7 @@
       "matchDepNames": ["pnpm", "node"],
       "matchManagers": ["custom.jsonata"],
       "minimumReleaseAge": "1 days",
-      "platformAutomerge": true,
-      "postUpdateOptions": ["pnpmExtractLockfile"]
+      "platformAutomerge": true
     }
   ],
   "timezone": "Etc/UTC"
