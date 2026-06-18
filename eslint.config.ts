@@ -66,7 +66,7 @@ export default defineConfig(
     extends: [json.configs.recommended, prettierRecommended],
     files: ['**/*.json'],
     language: 'json/json',
-    rules: { 'json/sort-keys': ['error', 'asc', { natural: true }] },
+    rules: { 'json/sort-keys': ['error', 'asc'] },
   },
   {
     extends: [
