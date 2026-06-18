@@ -25,14 +25,22 @@
       "platformAutomerge": true
     },
     {
-      "additionalBranchPrefix": "pnpm-",
       "automerge": true,
       "automergeType": "pr",
-      "groupName": "pnpm",
       "matchDepNames": ["pnpm", "node"],
       "matchManagers": ["custom.jsonata"],
       "minimumReleaseAge": "1 days",
       "platformAutomerge": true
+    },
+    {
+      "additionalBranchPrefix": "pnpm-",
+      "groupName": "pnpm",
+      "matchDepNames": ["pnpm"]
+    },
+    {
+      "additionalBranchPrefix": "node-",
+      "groupName": "node",
+      "matchDepNames": ["node"]
     }
   ],
   "timezone": "Etc/UTC"
