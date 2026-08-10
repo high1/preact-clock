@@ -48,7 +48,7 @@
     },
     "runtime": {
       "name": "node",
-      "version": "26.5.1"
+      "version": "26.7.0"
     }
   },
   "imports": {
