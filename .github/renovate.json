@@ -13,7 +13,6 @@
     }
   ],
   "extends": ["config:recommended", "schedule:weekly"],
-  "ignoreDeps": ["preact"],
   "minimumReleaseAge": "1 days",
   "packageRules": [
     {
