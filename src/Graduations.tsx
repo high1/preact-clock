@@ -1,5 +1,6 @@
 import { ClockLine as Graduation } from '#src/ClockLine';
-import { rotate, seconds } from '#src/common';
+import { clockGraduationId, rotate, seconds } from '#src/common';
+import { getTestId } from '#src/utilities';
 
 export const Graduations = () =>
   Array.from(Array(seconds).keys(), (index) => ({
@@ -12,6 +13,7 @@ export const Graduations = () =>
           ? 'stroke-zinc-600 stroke-2 dark:stroke-zinc-200'
           : 'stroke-zinc-200 dark:stroke-zinc-600'
       }
+      data-testid={getTestId(`${clockGraduationId}-${index}`)}
       graduation
       key={index}
       length={isHour ? 6 : 2.5}

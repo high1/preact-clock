@@ -1,6 +1,9 @@
 import type { SVGAttributes } from 'preact';
 
-interface ClockLineProps extends SVGAttributes<SVGLineElement> {
+export interface ClockLineProps extends Omit<
+  SVGAttributes<SVGLineElement>,
+  'stroke-linecap' | 'y1' | 'y2'
+> {
   graduation?: true;
   length: number;
   limit?: number;
@@ -14,8 +17,8 @@ export const ClockLine = ({
 }: ClockLineProps) => (
   <line
     stroke-linecap="round"
+    {...rest}
     y1={graduation && length - limit}
     y2={-(graduation ? limit : length)}
-    {...rest}
   />
 );
