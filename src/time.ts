@@ -16,10 +16,20 @@ const TimeModel = createModel(() => {
   const clock = signal(getSecondsSinceMidnight(new Date()));
   const update = () => (clock.value = getSecondsSinceMidnight(new Date()));
 
-  requestAnimationFrame(function loop() {
+  let frame: number | undefined;
+  const loop = () => {
     update();
-    requestAnimationFrame(loop);
-  });
+    frame = requestAnimationFrame(loop);
+  };
+  const start = () => {
+    frame = requestAnimationFrame(loop);
+  };
+  const stop = () => {
+    if (frame !== undefined) {
+      cancelAnimationFrame(frame);
+      frame = undefined;
+    }
+  };
 
   return {
     hour: computed(() =>
@@ -29,7 +39,10 @@ const TimeModel = createModel(() => {
       rotate(((clock.value / seconds) % seconds) / seconds),
     ),
     second: computed(() => rotate((clock.value % seconds) / seconds)),
+    start,
+    stop,
     subsecond: computed(() => rotate(clock.value % 1, 0)),
+    update,
   };
 });
 
