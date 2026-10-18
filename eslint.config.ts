@@ -53,6 +53,13 @@ export default defineConfig(
       },
     },
     rules: {
+      '@typescript-eslint/no-import-type-side-effects': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+        },
+      ],
       '@typescript-eslint/restrict-template-expressions': [
         'error',
         { allowNumber: true },
@@ -66,7 +73,7 @@ export default defineConfig(
     extends: [json.configs.recommended, prettierRecommended],
     files: ['**/*.json'],
     language: 'json/json',
-    rules: { 'json/sort-keys': ['error', 'asc'] },
+    rules: { 'json/sort-keys': ['error', 'asc', { natural: true }] },
   },
   {
     extends: [
