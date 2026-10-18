@@ -58,12 +58,24 @@
       "./*.tsx"
     ]
   },
-  "keywords": [],
+  "keywords": [
+    "preact",
+    "clock",
+    "svg"
+  ],
+  "license": "MIT",
   "name": "preact-clock",
+  "packageManager": "pnpm@12.14.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/high1/preact-clock.git"
+  },
   "scripts": {
     "build": "vite build",
     "coverage": "vitest run --coverage",
     "dev": "vite",
+    "format": "prettier --check",
+    "lint": "eslint . --max-warnings 0",
     "playwright": "playwright install --only-shell chromium",
     "preview": "vite preview",
     "start": "vite",
