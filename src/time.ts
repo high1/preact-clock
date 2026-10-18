@@ -3,8 +3,14 @@ import { computed, createModel, signal } from '@preact/signals';
 import { rotate, seconds } from '#src/common';
 
 const hours = seconds / 5;
-const getSecondsSinceMidnight = (date: Date) =>
-  (date.getTime() - date.setHours(0, 0, 0, 0)) / 1000;
+// Wall-clock seconds since local midnight. Uses getters only (no setHours),
+// so it never mutates the argument and is immune to DST transition days
+// (which have 23 or 25 elapsed hours).
+export const getSecondsSinceMidnight = (date: Date) =>
+  date.getHours() * 3600 +
+  date.getMinutes() * 60 +
+  date.getSeconds() +
+  date.getMilliseconds() / 1000;
 
 const TimeModel = createModel(() => {
   const clock = signal(getSecondsSinceMidnight(new Date()));
