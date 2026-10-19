@@ -65,4 +65,27 @@ describe('<ClockHands />', () => {
       vi.useRealTimers();
     },
   );
+
+  // Preact flushes effects after paint, so the loop only starts once a frame
+  // has gone by. Ticking frames drives the callback that keeps the clock alive.
+  test('keeps advancing the clock on every frame', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2020, 0, 1, 0, 0, 0, 0));
+    const screen = render(<ClockHands />);
+    const secondHand = () =>
+      screen.getByTestId(clockSecondId).element().getAttribute('transform');
+
+    const seen: (null | string)[] = [];
+    for (let i = 0; i < 3; i++) {
+      vi.advanceTimersToNextFrame();
+      vi.advanceTimersByTime(1000);
+      await Promise.resolve();
+      seen.push(secondHand());
+    }
+
+    // The hand keeps moving rather than freezing after the first frame.
+    expect(new Set(seen).size).toBe(3);
+
+    screen.unmount();
+  });
 });
