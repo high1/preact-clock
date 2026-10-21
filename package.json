@@ -71,6 +71,7 @@
   },
   "scripts": {
     "build": "vite build",
+    "check": "tsc --noEmit",
     "coverage": "vitest run --coverage",
     "dev": "vite",
     "format": "prettier --check",
