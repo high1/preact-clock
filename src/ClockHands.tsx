@@ -1,4 +1,4 @@
-import { useSignal } from '@preact/signals';
+import { useComputed, useSignal } from '@preact/signals';
 import { useEffect } from 'preact/hooks';
 
 import { ClockLine as ClockHand } from '#src/ClockLine';
@@ -14,6 +14,10 @@ import { getTestId } from '#src/utilities';
 
 export const ClockHands = () => {
   const clock = useSignal(getSecondsSinceMidnight());
+  const subsecond = useComputed(() => subsecondTransform(clock.value));
+  const hour = useComputed(() => hourTransform(clock.value));
+  const minute = useComputed(() => minuteTransform(clock.value));
+  const second = useComputed(() => secondTransform(clock.value));
 
   useEffect(() => {
     let frame = requestAnimationFrame(function loop() {
@@ -31,25 +35,25 @@ export const ClockHands = () => {
         class="stroke-zinc-200 stroke-3 dark:stroke-zinc-600"
         data-testid={getTestId('clock-subsecond')}
         length={82}
-        transform={subsecondTransform(clock.value)}
+        transform={subsecond}
       />
       <ClockHand
         class="stroke-zinc-600 stroke-4 dark:stroke-zinc-200"
         data-testid={getTestId(clockHourId)}
         length={46}
-        transform={hourTransform(clock.value)}
+        transform={hour}
       />
       <ClockHand
         class="stroke-zinc-400 stroke-3"
         data-testid={getTestId(clockMinuteId)}
         length={64}
-        transform={minuteTransform(clock.value)}
+        transform={minute}
       />
       <ClockHand
         class="stroke-preact stroke-2"
         data-testid={getTestId(clockSecondId)}
         length={76}
-        transform={secondTransform(clock.value)}
+        transform={second}
       />
     </>
   );

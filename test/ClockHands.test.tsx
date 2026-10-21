@@ -77,6 +77,9 @@ describe('<ClockHands />', () => {
       vi.advanceTimersToNextFrame();
       vi.advanceTimersByTime(1000);
       await Promise.resolve();
+      // The signal writes the attribute on the frame after the clock ticks.
+      vi.advanceTimersToNextFrame();
+      await Promise.resolve();
       seen.push(secondHand());
     }
 
