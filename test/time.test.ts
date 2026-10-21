@@ -76,10 +76,10 @@ describe('getSecondsSinceMidnight', () => {
 
 describe('hourTransform', () => {
   test.each([
-    [0, 'rotate(0.0)'],
-    [21_600, 'rotate(180.0)'], // 6:00
-    [32_400, 'rotate(270.0)'], // 9:00
-    [43_200, 'rotate(0.0)'], // 12:00
+    [0, 'rotate(0)'],
+    [21_600, 'rotate(180)'], // 6:00
+    [32_400, 'rotate(270)'], // 9:00
+    [43_200, 'rotate(0)'], // 12:00
     [45_900, 'rotate(22.5)'], // 12:45 → 12.75h → 0.0625 → 22.5°
   ])('%s seconds since midnight → %s', (seconds, expected) => {
     expect(hourTransform(seconds)).toBe(expected);
@@ -88,9 +88,9 @@ describe('hourTransform', () => {
 
 describe('minuteTransform', () => {
   test.each([
-    [0, 'rotate(0.0)'],
-    [1_800, 'rotate(180.0)'], // 30 minutes
-    [3_600, 'rotate(0.0)'], // 60 minutes
+    [0, 'rotate(0)'],
+    [1_800, 'rotate(180)'], // 30 minutes
+    [3_600, 'rotate(0)'], // 60 minutes
   ])('%s seconds since midnight → %s', (seconds, expected) => {
     expect(minuteTransform(seconds)).toBe(expected);
   });
@@ -98,9 +98,9 @@ describe('minuteTransform', () => {
 
 describe('secondTransform', () => {
   test.each([
-    [0, 'rotate(0.0)'],
-    [30, 'rotate(180.0)'],
-    [59, 'rotate(354.0)'],
+    [0, 'rotate(0)'],
+    [30, 'rotate(180)'],
+    [59, 'rotate(354)'],
   ])('%s seconds since midnight → %s', (seconds, expected) => {
     expect(secondTransform(seconds)).toBe(expected);
   });
