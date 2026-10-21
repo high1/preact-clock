@@ -23,7 +23,7 @@ export const ClockHands = () => {
     return () => {
       cancelAnimationFrame(frame);
     };
-  }, []); // eslint-disable-line @eslint-react/exhaustive-deps
+  }, []);
 
   return (
     <>
