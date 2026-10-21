@@ -13,6 +13,19 @@ afterEach(() => {
 });
 
 describe('getSecondsSinceMidnight', () => {
+  test('runs in the requested timezone', () => {
+    const expected = import.meta.env.VITE_TZ;
+    if (expected)
+      expect(Intl.DateTimeFormat().resolvedOptions().timeZone).toBe(expected);
+  });
+
+  test('includes milliseconds', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 0, 15, 12, 0, 0, 500));
+
+    expect(getSecondsSinceMidnight()).toBeCloseTo(43_200.5, 3);
+  });
+
   test.each([
     ['midnight', new Date(2020, 0, 1, 0, 0, 0, 0), 0],
     ['one second past midnight', new Date(2020, 0, 1, 0, 0, 1, 0), 1],
