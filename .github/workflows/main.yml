@@ -30,6 +30,9 @@ jobs:
           require-lockfile: true
           save-cache: ${{ github.ref == 'refs/heads/main' }}
 
+      - name: Audit 🛡️
+        run: pnpm audit
+
       - name: Install playwright 🌐
         run: pnpm playwright
 
