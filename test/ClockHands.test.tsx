@@ -10,6 +10,7 @@ describe('<ClockHands />', () => {
   });
 
   afterEach(() => {
+    vi.restoreAllMocks();
     vi.useRealTimers();
   });
 
@@ -90,17 +91,26 @@ describe('<ClockHands />', () => {
   });
 
   test('starts the loop on mount', () => {
+    const frame = vi.spyOn(window, 'requestAnimationFrame');
     const screen = render(<ClockHands />);
-    vi.advanceTimersToNextFrame();
+
+    // The loop asks for a frame, and that frame is the only timer pending.
+    expect(frame).toHaveBeenCalledTimes(1);
     expect(vi.getTimerCount()).toBe(1);
+
     screen.unmount();
   });
 
   test('stops the loop on unmount', () => {
+    const frame = vi.spyOn(window, 'requestAnimationFrame');
     const screen = render(<ClockHands />);
-    vi.advanceTimersToNextFrame(); // effects flush after paint, the loop starts
+    vi.advanceTimersToNextFrame(); // the loop runs and asks for another frame
+    const asked = frame.mock.calls.length;
+
     screen.unmount();
-    vi.advanceTimersToNextFrame(); // Preact 11 runs the cleanup after paint
+
+    // The pending frame is cancelled, and the loop asks for no more.
     expect(vi.getTimerCount()).toBe(0);
+    expect(frame).toHaveBeenCalledTimes(asked);
   });
 });
