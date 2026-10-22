@@ -27,7 +27,7 @@ export const ClockHands = () => {
     return () => {
       cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [clock]);
 
   return (
     <>
