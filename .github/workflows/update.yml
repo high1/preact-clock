@@ -22,16 +22,13 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v7.0.1
 
-      # Installs the pnpm version and the runtime from devEngines.
       - name: Pnpm 🧱
         uses: pnpm/setup@v3.1.1
-
-      # Updates the dependencies, the pinned pnpm and the pinned runtime, and
-      # opens a pull request with the result.
       - name: Update dependencies 🔄
-        uses: pnpm/update@v0.0.0
+        # The only tag is older than the action's own fixes, so a commit is
+        # pinned instead.
+        uses: pnpm/update@2457663d4150026edd3adb62b660eb85571bc7cb
         with:
-          # The pull request is only opened if the update passes the checks.
           verify: |
             pnpm check
             pnpm lint
