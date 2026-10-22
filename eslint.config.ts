@@ -6,6 +6,7 @@ import eslint from '@eslint/js';
 import json from '@eslint/json';
 import markdown from '@eslint/markdown';
 import html from '@html-eslint/eslint-plugin';
+import signals from '@preact/eslint-plugin-signals';
 import stylistic from '@stylistic/eslint-plugin';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { importX } from 'eslint-plugin-import-x';
@@ -52,6 +53,7 @@ export default defineConfig(
         },
       },
     },
+    plugins: { signals },
     rules: {
       '@typescript-eslint/no-import-type-side-effects': 'error',
       '@typescript-eslint/no-unused-vars': [
@@ -64,6 +66,12 @@ export default defineConfig(
         'error',
         { allowNumber: true },
       ],
+      'signals/no-conditional-value-read': 'error',
+      'signals/no-signal-in-component-body': 'error',
+      'signals/no-signal-truthiness': 'error',
+      'signals/no-signal-write-in-computed': 'error',
+      'signals/no-useless-computed': 'error',
+      'signals/no-value-after-await': 'error',
     },
     settings: {
       'import-x/resolver-next': [createTypeScriptImportResolver()],
