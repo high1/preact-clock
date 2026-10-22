@@ -55,8 +55,6 @@ export default defineConfig(
     },
     plugins: { signals },
     rules: {
-      // The dependency model is React's; a signal is not a React-style dep.
-      '@eslint-react/exhaustive-deps': 'off',
       '@typescript-eslint/no-import-type-side-effects': 'error',
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -70,9 +68,9 @@ export default defineConfig(
       ],
       'signals/no-conditional-value-read': 'error',
       'signals/no-signal-in-component-body': 'error',
-      'signals/no-signal-truthiness': 'warn',
+      'signals/no-signal-truthiness': 'error',
       'signals/no-signal-write-in-computed': 'error',
-      'signals/no-useless-computed': 'warn',
+      'signals/no-useless-computed': 'error',
       'signals/no-value-after-await': 'error',
     },
     settings: {
