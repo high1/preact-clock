@@ -29,9 +29,6 @@ jobs:
         # pinned instead.
         uses: pnpm/update@2457663d4150026edd3adb62b660eb85571bc7cb
         with:
-          # pnpm writes the dependencies in its own order, and the lint wants
-          # them sorted.
-          post-update: pnpm exec eslint --fix package.json
           # TypeScript 7 is the native rewrite, and the eslint plugins need
           # the JavaScript API it does not have.
           exclude: typescript
