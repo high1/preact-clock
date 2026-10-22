@@ -88,4 +88,19 @@ describe('<ClockHands />', () => {
 
     screen.unmount();
   });
+
+  test('starts the loop on mount', () => {
+    const screen = render(<ClockHands />);
+    vi.advanceTimersToNextFrame();
+    expect(vi.getTimerCount()).toBe(1);
+    screen.unmount();
+  });
+
+  test('stops the loop on unmount', () => {
+    const screen = render(<ClockHands />);
+    vi.advanceTimersToNextFrame(); // effects flush after paint, the loop starts
+    screen.unmount();
+    vi.advanceTimersToNextFrame(); // Preact 11 runs the cleanup after paint
+    expect(vi.getTimerCount()).toBe(0);
+  });
 });
