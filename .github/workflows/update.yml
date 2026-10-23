@@ -29,6 +29,8 @@ jobs:
         # pinned instead.
         uses: pnpm/update@2457663d4150026edd3adb62b660eb85571bc7cb
         with:
+          github-actions: true
+          token: ${{ secrets.UPDATE_TOKEN }}
           # The browser has to match the playwright the update brought in, so
           # it is installed after the update and before the verification.
           post-update: pnpm playwright
