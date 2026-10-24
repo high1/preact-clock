@@ -1,13 +1,13 @@
 {
   "dependencies": {
     "@preact/signals": "2.11.3",
-    "preact": "11.0.1"
+    "preact": "11.0.2"
   },
   "description": "preact clock, inspired by sauron clock",
   "devDependencies": {
-    "@babel/core": "8.0.7",
+    "@babel/core": "8.0.9",
     "@e18e/eslint-plugin": "0.8.1",
-    "@eslint-react/eslint-plugin": "5.28.6",
+    "@eslint-react/eslint-plugin": "5.28.8",
     "@eslint/css": "2.0.1",
     "@eslint/js": "10.0.1",
     "@eslint/json": "2.1.1",
