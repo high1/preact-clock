@@ -10,7 +10,7 @@ import signals from '@preact/eslint-plugin-signals';
 import stylistic from '@stylistic/eslint-plugin';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { importX } from 'eslint-plugin-import-x';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
+import jsxA11y from 'eslint-plugin-jsx-a11y-x';
 import perfectionist from 'eslint-plugin-perfectionist';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import yml from 'eslint-plugin-yml';
@@ -34,7 +34,7 @@ export default defineConfig(
       tseslint.configs.strictTypeChecked,
       tseslint.configs.stylisticTypeChecked,
       e18e.configs.recommended,
-      jsxA11y.flatConfigs.strict,
+      jsxA11y.configs.strict,
       react.configs['strict-type-checked'],
       importX.flatConfigs.recommended,
       importX.flatConfigs.typescript,
@@ -47,7 +47,7 @@ export default defineConfig(
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {
-        ...jsxA11y.flatConfigs.strict.languageOptions,
+        ...jsxA11y.configs.strict.languageOptions,
         ecmaFeatures: {
           jsx: true,
         },
