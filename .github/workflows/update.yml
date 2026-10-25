@@ -22,7 +22,7 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v7.0.1
         with:
-          token: ${{ secrets.UPDATE_TOKEN }}
+          persist-credentials: false
 
       - name: Pnpm 🧱
         uses: pnpm/setup@v3.1.1
@@ -31,6 +31,7 @@ jobs:
         # pinned instead.
         uses: pnpm/update@2457663d4150026edd3adb62b660eb85571bc7cb
         with:
+          token: ${{ secrets.UPDATE_TOKEN }}
           # The browser has to match the playwright the update brought in, so
           # it is installed after the update and before the verification.
           post-update: pnpm playwright
