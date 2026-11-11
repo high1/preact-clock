@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { handRotations } from '#src/common';
+import {
+  hourRotation,
+  minuteRotation,
+  secondRotation,
+  subsecondRotation,
+} from '#src/common';
 import {
   formatTime,
   getSecondsSinceMidnight,
@@ -89,7 +94,7 @@ describe('getSecondsSinceMidnight', () => {
   });
 });
 
-describe('handRotations', () => {
+describe('rotations', () => {
   test.each([
     ['midnight', 0, 'rotate(0)', 'rotate(0)', 'rotate(0)', 'rotate(0)'],
     ['one hour', 3_600, 'rotate(0)', 'rotate(0)', 'rotate(0)', 'rotate(30)'],
@@ -118,7 +123,10 @@ describe('handRotations', () => {
       'rotate(0)',
     ],
   ])('%s', (_name, clock, subsecond, second, minute, hour) => {
-    expect(handRotations(clock)).toEqual({ hour, minute, second, subsecond });
+    expect(subsecondRotation(clock)).toBe(subsecond);
+    expect(secondRotation(clock)).toBe(second);
+    expect(minuteRotation(clock)).toBe(minute);
+    expect(hourRotation(clock)).toBe(hour);
   });
 });
 

@@ -38,7 +38,7 @@ export const ClockHands = ({ clock }: ClockHandsProps) => {
       />
       <ClockHand
         class="stroke-zinc-400 stroke-3"
-        data-testId={getTestId(clockMinuteId)}
+        data-testid={getTestId(clockMinuteId)}
         length={64}
         transform={minute.value}
       />

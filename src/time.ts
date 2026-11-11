@@ -88,12 +88,12 @@ export const getSecondsSinceMidnightIn = (timestamp: number, zone: string) => {
 export const createTime = (zone: () => string) => {
   const clock = computed(() => getSecondsSinceMidnightIn(now.value, zone()));
 
-  return {
-    hour: computed(() => hourRotation(clock.value)),
-    minute: computed(() => minuteRotation(clock.value)),
-    second: computed(() => secondRotation(clock.value)),
-    subsecond: computed(() => subsecondRotation(clock.value)),
-  };
+  const hour = computed(() => hourRotation(clock.value));
+  const minute = computed(() => minuteRotation(clock.value));
+  const second = computed(() => secondRotation(clock.value));
+  const subsecond = computed(() => subsecondRotation(clock.value));
+
+  return { hour, minute, second, subsecond };
 };
 
 // Wall-clock HH:MM:SS at quarter-minute boundaries, for announcements.

@@ -10,14 +10,6 @@ export const secondRotation = (clock: number) =>
   rotate((clock % seconds) / seconds);
 export const subsecondRotation = (clock: number) => rotate(clock % 1, 0);
 
-// Turns seconds since midnight into one full revolution per hand.
-export const handRotations = (clock: number) => ({
-  hour: hourRotation(clock),
-  minute: minuteRotation(clock),
-  second: secondRotation(clock),
-  subsecond: subsecondRotation(clock),
-});
-
 export const clockFaceId = 'clock-face';
 export const clockGraduationId = 'clock-graduation';
 export const clockHourId = 'clock-hour';
