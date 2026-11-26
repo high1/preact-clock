@@ -1,14 +1,14 @@
 export const seconds = 60;
-export const rotate = (turns: number, fractionDigits = 1) =>
-  `rotate(${Number((turns * 360).toFixed(fractionDigits))})`;
+export const rotate = (fraction: number, fractionDigits: number) =>
+  `rotate(${Number((fraction * 360).toFixed(fractionDigits))})`;
 
-export const hourRotation = (clock: number) =>
-  rotate(((clock / seconds ** 2) % (seconds / 5)) / (seconds / 5));
-export const minuteRotation = (clock: number) =>
-  rotate(((clock / seconds) % seconds) / seconds);
-export const secondRotation = (clock: number) =>
-  rotate((clock % seconds) / seconds);
-export const subsecondRotation = (clock: number) => rotate(clock % 1, 0);
+const hoursPerClock = 12; // 12 hour positions on the dial
+export const hourFraction = (clock: number) =>
+  ((clock / seconds ** 2) % hoursPerClock) / hoursPerClock;
+export const minuteFraction = (clock: number) =>
+  ((clock / seconds) % seconds) / seconds;
+export const secondFraction = (clock: number) => (clock % seconds) / seconds;
+export const subsecondFraction = (clock: number) => clock % 1;
 
 export const clockFaceId = 'clock-face';
 export const clockGraduationId = 'clock-graduation';

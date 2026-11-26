@@ -33,11 +33,21 @@ describe('<ClockLine />', () => {
     expect(line?.getAttribute('y2')).toBe('-10'); // -limit
   });
 
-  test('regular line sets y1 to false and y2 to -length', () => {
+  test('regular line omits y1 and sets y2 to -length', () => {
     const { container } = render(<ClockLine length={80} />);
     const line = container.querySelector('line');
     expect(line).not.toBeNull();
     expect(line?.getAttribute('y1')).toBeNull();
     expect(line?.getAttribute('y2')).toBe('-80');
+  });
+
+  test('rest props do not override the computed stroke-linecap', () => {
+    const props = {
+      'length': 80,
+      'stroke-linecap': 'butt',
+    } as unknown as ClockLineProps;
+    const { container } = render(<ClockLine {...props} />);
+    const line = container.querySelector('line');
+    expect(line?.getAttribute('stroke-linecap')).toBe('round');
   });
 });

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-256 -256 512 512">
+  <style>
+    .hex{fill:#673ab8}.detail{stroke:#fff}.dot{fill:#fff}
+    @media (prefers-color-scheme:dark){
+      .hex{fill:#fff}.detail{stroke:#673ab8}.dot{fill:#673ab8}
+    }
+  </style>
+  <path class="hex" d="M0,-256 221.7025033688164,-128 221.7025033688164,128 0,256 -221.7025033688164,128 -221.7025033688164,-128z"/>
+  <ellipse class="detail" cx="0" cy="0" stroke-width="16px" rx="75px" ry="196px" fill="none" transform="rotate(52.5)"/>
+  <ellipse class="detail" cx="0" cy="0" stroke-width="16px" rx="75px" ry="196px" fill="none" transform="rotate(-52.5)"/>
+  <circle class="dot" cx="0" cy="0" r="34"/>
+</svg>

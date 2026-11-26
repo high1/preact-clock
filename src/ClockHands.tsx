@@ -1,26 +1,14 @@
-import { type ReadonlySignal, useComputed } from '@preact/signals';
-
 import { ClockLine as ClockHand } from '#src/ClockLine';
-import {
-  clockHourId,
-  clockMinuteId,
-  clockSecondId,
-  hourRotation,
-  minuteRotation,
-  secondRotation,
-  subsecondRotation,
-} from '#src/common';
+import { clockHourId, clockMinuteId, clockSecondId } from '#src/common';
+import { useClockAnimation } from '#src/useClockAnimation';
 import { getTestId } from '#src/utilities';
 
 interface ClockHandsProps {
-  clock: ReadonlySignal<number>;
+  zone: () => string;
 }
 
-export const ClockHands = ({ clock }: ClockHandsProps) => {
-  const hour = useComputed(() => hourRotation(clock.value));
-  const minute = useComputed(() => minuteRotation(clock.value));
-  const second = useComputed(() => secondRotation(clock.value));
-  const subsecond = useComputed(() => subsecondRotation(clock.value));
+export const ClockHands = (props: ClockHandsProps) => {
+  const { hour, minute, second, subsecond } = useClockAnimation(props.zone);
 
   return (
     <>
@@ -28,25 +16,25 @@ export const ClockHands = ({ clock }: ClockHandsProps) => {
         class="stroke-zinc-200 stroke-3 dark:stroke-zinc-600"
         data-testid={getTestId('clock-subsecond')}
         length={82}
-        transform={subsecond.value}
+        transform={subsecond}
       />
       <ClockHand
         class="stroke-zinc-600 stroke-4 dark:stroke-zinc-200"
         data-testid={getTestId(clockHourId)}
         length={46}
-        transform={hour.value}
+        transform={hour}
       />
       <ClockHand
         class="stroke-zinc-400 stroke-3"
         data-testid={getTestId(clockMinuteId)}
         length={64}
-        transform={minute.value}
+        transform={minute}
       />
       <ClockHand
-        class="stroke-preact stroke-2"
+        class="stroke-preact stroke-2 dark:stroke-white"
         data-testid={getTestId(clockSecondId)}
         length={76}
-        transform={second.value}
+        transform={second}
       />
     </>
   );

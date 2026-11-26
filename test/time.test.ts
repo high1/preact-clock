@@ -1,18 +1,19 @@
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import {
-  hourRotation,
-  minuteRotation,
-  secondRotation,
-  subsecondRotation,
+  hourFraction,
+  minuteFraction,
+  rotate,
+  secondFraction,
+  subsecondFraction,
 } from '#src/common';
 import {
   formatTime,
   getSecondsSinceMidnight,
   getSecondsSinceMidnightIn,
   getTimeZone,
-  now,
-  startClock,
+  getTimeZones,
+  zonedParts,
 } from '#src/time';
 
 afterEach(() => {
@@ -53,8 +54,7 @@ describe('getSecondsSinceMidnight', () => {
     expect(date.getTime()).toBe(before);
   });
 
-  // Comparing two live readings would flake across midnight, so pin the clock
-  // and assert the exact value instead.
+  // Pin the clock to avoid a flake across midnight.
   test('defaults to now', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date(2020, 0, 1, 12, 0, 0, 0));
@@ -62,28 +62,33 @@ describe('getSecondsSinceMidnight', () => {
     expect(getSecondsSinceMidnight()).toBe(43_200);
   });
 
-  // A DST transition day is one where the UTC offset at local midnight differs
-  // from the offset at local noon: the clocks moved in between. Noon on such a
-  // day is 12:00 wall-clock no matter how much real time elapsed since local
-  // midnight, so measuring elapsed time instead puts it an hour out.
-  const transitionNoons = (year: number) => {
-    const found: { kind: 'fall back' | 'spring forward'; noon: Date }[] = [];
-    for (let day = 0; day < 366; day++) {
-      const midnight = new Date(year, 0, 1 + day, 0, 0, 0);
-      if (midnight.getFullYear() !== year) break;
-      const noon = new Date(year, midnight.getMonth(), midnight.getDate(), 12);
-      const change = midnight.getTimezoneOffset() - noon.getTimezoneOffset();
-      if (change !== 0)
-        found.push({ kind: change > 0 ? 'spring forward' : 'fall back', noon });
-    }
-    return found;
-  };
-
   describe('across daylight saving transitions', () => {
+    // On DST days noon stays 12:00, unlike elapsed time since midnight.
+    const transitionNoons = (year: number) => {
+      const found: { kind: 'fall back' | 'spring forward'; noon: Date }[] = [];
+      for (let day = 0; day < 366; day++) {
+        const midnight = new Date(year, 0, 1 + day, 0, 0, 0);
+        if (midnight.getFullYear() !== year) break;
+        const noon = new Date(
+          year,
+          midnight.getMonth(),
+          midnight.getDate(),
+          12,
+        );
+        const change = midnight.getTimezoneOffset() - noon.getTimezoneOffset();
+        if (change !== 0) {
+          found.push({
+            kind: change > 0 ? 'spring forward' : 'fall back',
+            noon,
+          });
+        }
+      }
+      return found;
+    };
+
     const transitions = transitionNoons(2020);
 
-    // Skips rather than passes vacuously when the timezone has no DST. CI runs
-    // this suite across several zones so the skip is never what actually runs.
+    // Skip in zones without DST; CI covers zones that have it.
     test.skipIf(transitions.length === 0)(
       'noon stays at 12:00 wall-clock on every transition day',
       () => {
@@ -92,41 +97,82 @@ describe('getSecondsSinceMidnight', () => {
       },
     );
   });
+
+  // UTC instants around each DST transition.
+  describe('across daylight saving transitions at exact instants', () => {
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    const transitions: Record<string, { autumn: number; spring: number }> = {
+      'America/New_York': {
+        autumn: Date.UTC(2020, 10, 1, 6),
+        spring: Date.UTC(2020, 2, 8, 7),
+      },
+      'Australia/Sydney': {
+        autumn: Date.UTC(2020, 3, 4, 16),
+        spring: Date.UTC(2020, 9, 3, 16),
+      },
+      'Europe/Belgrade': {
+        autumn: Date.UTC(2020, 9, 25, 1),
+        spring: Date.UTC(2020, 2, 29, 1),
+      },
+      'Europe/Berlin': {
+        autumn: Date.UTC(2020, 9, 25, 1),
+        spring: Date.UTC(2020, 2, 29, 1),
+      },
+    };
+
+    const transition = transitions[zone];
+
+    test.skipIf(!transition)('spring forward skips an hour', () => {
+      if (!transition) return;
+
+      expect(getSecondsSinceMidnight(new Date(transition.spring - 1000))).toBe(
+        7199,
+      );
+      expect(getSecondsSinceMidnight(new Date(transition.spring))).toBe(10800);
+    });
+
+    test.skipIf(!transition)('fall back repeats an hour', () => {
+      if (!transition) return;
+
+      const before = zone === 'America/New_York' ? 7199 : 10799;
+      const after = zone === 'America/New_York' ? 3600 : 7200;
+
+      expect(getSecondsSinceMidnight(new Date(transition.autumn - 1000))).toBe(
+        before,
+      );
+      expect(getSecondsSinceMidnight(new Date(transition.autumn))).toBe(after);
+    });
+  });
 });
 
-describe('rotations', () => {
+describe('rotation', () => {
   test.each([
     ['midnight', 0, 'rotate(0)', 'rotate(0)', 'rotate(0)', 'rotate(0)'],
     ['one hour', 3_600, 'rotate(0)', 'rotate(0)', 'rotate(0)', 'rotate(30)'],
-    [
-      'half past noon',
-      43_200 + 1_800,
-      'rotate(0)',
-      'rotate(0)',
-      'rotate(180)',
-      'rotate(15)',
-    ],
-    [
-      '59.5 seconds',
-      59.5,
-      'rotate(180)',
-      'rotate(357)',
-      'rotate(5.9)',
-      'rotate(0.5)',
-    ],
-    [
-      'next midnight',
-      86_400,
-      'rotate(0)',
-      'rotate(0)',
-      'rotate(0)',
-      'rotate(0)',
-    ],
+    ['half past noon', 43_200 + 1_800, 'rotate(0)', 'rotate(0)', 'rotate(180)', 'rotate(15)'],
+    ['59.5 seconds', 59.5, 'rotate(180)', 'rotate(357)', 'rotate(5.9)', 'rotate(0.5)'],
+    ['next midnight', 86_400, 'rotate(0)', 'rotate(0)', 'rotate(0)', 'rotate(0)'],
   ])('%s', (_name, clock, subsecond, second, minute, hour) => {
-    expect(subsecondRotation(clock)).toBe(subsecond);
-    expect(secondRotation(clock)).toBe(second);
-    expect(minuteRotation(clock)).toBe(minute);
-    expect(hourRotation(clock)).toBe(hour);
+    expect(rotate(hourFraction(clock), 1)).toEqual(hour);
+    expect(rotate(minuteFraction(clock), 1)).toEqual(minute);
+    expect(rotate(secondFraction(clock), 1)).toEqual(second);
+    expect(rotate(subsecondFraction(clock), 0)).toEqual(subsecond);
+  });
+});
+
+describe('rotation primitives', () => {
+  test.each([
+    ['midnight', 0, 0, 0, 0, 0],
+    ['one hour', 3_600, 1 / 12, 0, 0, 0],
+    ['half past noon', 43_200 + 1_800, 0.5 / 12, 0.5, 0, 0],
+    ['59.5 seconds', 59.5, 59.5 / 3600 / 12, 59.5 / 60 / 60, 59.5 / 60, 0.5],
+    ['next midnight', 86_400, 0, 0, 0, 0],
+  ])('%s', (_name, clock, hour, minute, second, subsecond) => {
+    expect(hourFraction(clock)).toBeCloseTo(hour, 5);
+    expect(minuteFraction(clock)).toBeCloseTo(minute, 5);
+    expect(secondFraction(clock)).toBeCloseTo(second, 5);
+    expect(subsecondFraction(clock)).toBeCloseTo(subsecond, 5);
   });
 });
 
@@ -140,13 +186,6 @@ describe('formatTime', () => {
     [23 * 3600 + 59 * 60 + 59, '11:59:45'],
   ])('%s seconds since midnight → %s', (seconds, expected) => {
     expect(formatTime(seconds)).toBe(expected);
-  });
-});
-
-describe('getTimeZone', () => {
-  test('returns the runtime timezone as a string', () => {
-    expect(typeof getTimeZone()).toBe('string');
-    expect(getTimeZone().length).toBeGreaterThan(0);
   });
 });
 
@@ -201,112 +240,105 @@ describe('getSecondsSinceMidnightIn', () => {
   });
 });
 
-describe('startClock', () => {
-  const cleanups = new Set<() => void>();
-
-  const start = () => {
-    const stop = startClock();
-    cleanups.add(stop);
-    return () => {
-      cleanups.delete(stop);
-      stop();
-    };
-  };
-
-  beforeEach(() => {
-    vi.useFakeTimers();
-    vi.spyOn(globalThis, 'requestAnimationFrame');
+describe('zonedParts wallSeconds', () => {
+  test.each([
+    ['midnight', Date.UTC(2020, 0, 1, 0, 0, 0, 0), 0],
+    ['one second past midnight', Date.UTC(2020, 0, 1, 0, 0, 1, 0), 1],
+    ['one minute past midnight', Date.UTC(2020, 0, 1, 0, 1, 0, 0), 60],
+    ['noon', Date.UTC(2020, 0, 1, 12, 0, 0, 0), 43_200],
+    ['last second of the day', Date.UTC(2020, 0, 1, 23, 59, 59, 0), 86_399],
+  ])('%s in UTC', (_name, timestamp, expected) => {
+    expect(zonedParts(timestamp, 'UTC').wallSeconds).toBe(expected);
   });
 
-  afterEach(() => {
-    cleanups.forEach((stop) => {
-      stop();
-    });
-    cleanups.clear();
-    vi.restoreAllMocks();
-    vi.useRealTimers();
-  });
+  test('renders the same instant in different zones', () => {
+    const timestamp = Date.UTC(2020, 2, 8, 16, 30, 0, 0);
 
-  test('schedules one rAF loop for the first subscriber', () => {
-    const stop = start();
-
-    expect(vi.mocked(globalThis.requestAnimationFrame)).toHaveBeenCalledTimes(
-      1,
+    expect(zonedParts(timestamp, 'UTC').wallSeconds).toBe(16 * 3600 + 1800);
+    expect(zonedParts(timestamp, 'Europe/Berlin').wallSeconds).toBe(
+      17 * 3600 + 1800,
     );
-
-    const before = now.value;
-    vi.advanceTimersToNextFrame();
-    expect(now.value).not.toBe(before);
-
-    stop();
-  });
-
-  test('reuses the same loop for additional subscribers', () => {
-    const stopFirst = start();
-    const stopSecond = start();
-    const stopThird = start();
-
-    expect(vi.mocked(globalThis.requestAnimationFrame)).toHaveBeenCalledTimes(
-      1,
+    expect(zonedParts(timestamp, 'America/New_York').wallSeconds).toBe(
+      12 * 3600 + 1800,
     );
-
-    stopFirst();
-    stopSecond();
-    stopThird();
-  });
-
-  test('stops updating the instant after unmount', () => {
-    const stop = start();
-
-    vi.advanceTimersToNextFrame();
-    const afterRun = now.value;
-    expect(afterRun).toBeGreaterThan(0);
-
-    stop();
-    vi.advanceTimersToNextFrame();
-
-    expect(now.value).toBe(afterRun);
-  });
-
-  test('keeps the loop running while any subscriber remains', () => {
-    const stopFirst = start();
-    const stopSecond = start();
-    const stopThird = start();
-
-    vi.advanceTimersToNextFrame();
-    const before = now.value;
-    expect(before).toBeGreaterThan(0);
-
-    stopFirst();
-    stopSecond();
-
-    vi.advanceTimersToNextFrame();
-    expect(now.value).not.toBe(before);
-
-    stopThird();
-  });
-
-  test('restarts the loop when a new subscriber mounts after unmount', () => {
-    const stop = start();
-    stop();
-
-    start()();
-    expect(vi.mocked(globalThis.requestAnimationFrame)).toHaveBeenCalledTimes(
-      2,
+    expect(zonedParts(timestamp, 'Australia/Sydney').wallSeconds).toBe(
+      3 * 3600 + 1800,
     );
   });
 
-  test('calling stop more than once does not prevent a later clock from starting', () => {
-    const stop = start();
-    stop();
-    stop();
+  test('converts timestamps to Berlin wall-clock time', () => {
+    const spring = Date.UTC(2020, 2, 8, 11, 0, 0, 0);
+    const autumn = Date.UTC(2020, 10, 1, 11, 0, 0, 0);
 
-    const stopNext = start();
+    expect(zonedParts(spring, 'Europe/Berlin').wallSeconds).toBe(12 * 3600);
+    expect(zonedParts(autumn, 'Europe/Berlin').wallSeconds).toBe(12 * 3600);
+  });
 
-    expect(vi.mocked(globalThis.requestAnimationFrame)).toHaveBeenCalledTimes(
-      2,
+  test('spring forward skips from 01:59:59 to 03:00:00', () => {
+    const before = Date.UTC(2020, 2, 29, 0, 59, 59);
+    const after = Date.UTC(2020, 2, 29, 1, 0, 0);
+
+    expect(zonedParts(before, 'Europe/Berlin').wallSeconds).toBe(7199);
+    expect(zonedParts(after, 'Europe/Berlin').wallSeconds).toBe(10800);
+  });
+
+  test('fall back repeats the 02:00 hour', () => {
+    const before = Date.UTC(2020, 9, 25, 0, 59, 59);
+    const after = Date.UTC(2020, 9, 25, 1, 0, 0);
+
+    expect(zonedParts(before, 'Europe/Berlin').wallSeconds).toBe(10799);
+    expect(zonedParts(after, 'Europe/Berlin').wallSeconds).toBe(7200);
+  });
+});
+
+describe('zonedParts offset', () => {
+  const winter = Date.UTC(2020, 0, 15, 12, 0, 0, 0);
+  const summer = Date.UTC(2020, 6, 15, 12, 0, 0, 0);
+
+  test.each([
+    ['UTC', 'UTC', winter, 0],
+    ['Europe/Berlin (winter)', 'Europe/Berlin', winter, 3600],
+    ['Europe/Berlin (summer)', 'Europe/Berlin', summer, 7200],
+    ['America/New_York (winter)', 'America/New_York', winter, -18_000],
+    ['America/New_York (summer)', 'America/New_York', summer, -14_400],
+    ['Australia/Sydney (summer)', 'Australia/Sydney', winter, 39_600],
+    ['Australia/Sydney (winter)', 'Australia/Sydney', summer, 36_000],
+    ['Asia/Kolkata', 'Asia/Kolkata', winter, 19_800],
+    ['Asia/Kathmandu', 'Asia/Kathmandu', winter, 20_700],
+  ])('%s', (_name, zone, timestamp, expected) => {
+    expect(zonedParts(timestamp, zone).offset).toBe(expected);
+  });
+
+  test('accounts for millisecond precision', () => {
+    const timestamp = Date.UTC(2020, 0, 15, 12, 0, 0, 500);
+
+    expect(zonedParts(timestamp, 'Europe/Berlin').offset).toBe(3600);
+    expect(zonedParts(timestamp, 'America/New_York').offset).toBe(-18000);
+  });
+});
+
+describe('timeZones', () => {
+  test('starts with UTC', () => {
+    expect(getTimeZones()[0]).toBe('UTC');
+  });
+
+  test('contains no Etc/GMT entries', () => {
+    expect(getTimeZones().some(zone => zone.startsWith('Etc/GMT'))).toBe(
+      false,
     );
+  });
 
-    stopNext();
+  test('retains the source order of the geographical entries', () => {
+    const source = Intl.supportedValuesOf('timeZone').filter(
+      zone => !zone.startsWith('Etc/GMT'),
+    );
+    expect(getTimeZones().slice(1)).toEqual(source);
+  });
+});
+
+describe('getTimeZone', () => {
+  test('returns the runtime timezone as a string', () => {
+    expect(typeof getTimeZone()).toBe('string');
+    expect(getTimeZone().length).toBeGreaterThan(0);
   });
 });

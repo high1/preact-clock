@@ -1,51 +1,64 @@
 import { computed, signal } from '@preact/signals';
 
 import {
-  hourRotation,
-  minuteRotation,
-  secondRotation,
-  subsecondRotation,
+  hourFraction,
+  minuteFraction,
+  secondFraction,
+  subsecondFraction,
 } from '#src/common';
+import { filterTimeZones } from '#src/timezone-options';
 
-// Wall-clock seconds since local midnight. Uses getters only (no setHours),
-// so it never mutates the argument and is immune to DST transition days
-// (which have 23 or 25 elapsed hours).
 export const getSecondsSinceMidnight = (date: Date = new Date()) =>
-  date.getHours() * 3600 +
-  date.getMinutes() * 60 +
-  date.getSeconds() +
-  date.getMilliseconds() / 1000;
+  toSeconds(
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
+    date.getMilliseconds(),
+  );
 
-// The shared instant. Every clock reads from this single value, so one loop
-// drives them all instead of one loop per clock.
+export const toSeconds = (
+  hours: number,
+  minutes: number,
+  seconds: number,
+  milliseconds: number,
+) => hours * 3600 + minutes * 60 + seconds + milliseconds / 1000;
+
+// Shared instant driven by one rAF loop.
 export const now = signal(Date.now());
 
-const subscribers = new Set<symbol>();
+// Test helper for advancing the shared clock without waiting for a frame.
+export const setNow = (timestamp: number) => {
+  now.value = timestamp;
+};
+
+let subscribers = 0;
 let frame = 0;
 
 export const startClock = () => {
-  const subscriber = Symbol();
-  subscribers.add(subscriber);
+  subscribers++;
 
-  if (subscribers.size === 1) {
-    const loop = () => {
+  if (subscribers === 1) {
+    frame = requestAnimationFrame(function loop() {
       now.value = Date.now();
       frame = requestAnimationFrame(loop);
-    };
-    frame = requestAnimationFrame(loop);
+    });
   }
 
+  let stopped = false;
   return () => {
-    if (!subscribers.delete(subscriber)) return;
+    if (stopped) return;
+    stopped = true;
+    subscribers--;
 
-    if (subscribers.size === 0) {
-      cancelAnimationFrame(frame);
-    }
+    if (subscribers === 0) cancelAnimationFrame(frame);
   };
 };
 
 export const getTimeZone = () =>
   Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+export const getTimeZones = (): string[] =>
+  filterTimeZones(Intl.supportedValuesOf('timeZone'));
 
 const formatters = new Map<string, Intl.DateTimeFormat>();
 
@@ -54,51 +67,55 @@ const formatterFor = (zone: string) => {
   if (existing) return existing;
 
   const formatter = new Intl.DateTimeFormat(undefined, {
-    hour: '2-digit',
+    calendar: 'gregory',
+    day: 'numeric',
+    hour: 'numeric',
     hourCycle: 'h23',
-    minute: '2-digit',
+    minute: 'numeric',
+    month: 'numeric',
     numberingSystem: 'latn',
-    second: '2-digit',
+    second: 'numeric',
     timeZone: zone,
+    year: 'numeric',
   });
   formatters.set(zone, formatter);
   return formatter;
 };
 
-const partsIn = (timestamp: number, zone: string) =>
-  new Map(
-    formatterFor(zone)
-      .formatToParts(new Date(timestamp))
-      .map((part) => [part.type, part.value] as const),
-  );
+export const zonedParts = (timestamp: number, zone: string) => {
+  const {
+    day = 1,
+    hour = 0,
+    minute = 0,
+    month = 1,
+    second = 0,
+    year = 0,
+  } = formatterFor(zone)
+    .formatToParts(timestamp)
+    .reduce<Partial<Record<Intl.DateTimeFormatPartTypes, number>>>(
+      (numbers, { type, value }) => {
+        numbers[type] = Number(value);
+        return numbers;
+      },
+      {},
+    );
+
+  const ms = ((timestamp % 1000) + 1000) % 1000;
+
+  return {
+    offset: Math.floor(
+      (Date.UTC(year, month - 1, day, hour, minute, second, ms) - timestamp)
+      / 1000,
+    ),
+    wallSeconds: toSeconds(hour, minute, second, ms),
+  };
+};
 
 // Wall-clock seconds since midnight in `zone`.
-export const getSecondsSinceMidnightIn = (timestamp: number, zone: string) => {
-  const parts = partsIn(timestamp, zone);
+export const getSecondsSinceMidnightIn = (timestamp: number, zone: string) =>
+  zonedParts(timestamp, zone).wallSeconds;
 
-  return (
-    Number(parts.get('hour')) * 3600 +
-    Number(parts.get('minute')) * 60 +
-    Number(parts.get('second')) +
-    (((timestamp % 1000) + 1000) % 1000) / 1000
-  );
-};
-
-// One clock in `zone`: the shared instant as individual hand derivations.
-export const createTime = (zone: () => string) => {
-  const clock = computed(() => getSecondsSinceMidnightIn(now.value, zone()));
-
-  const hour = computed(() => hourRotation(clock.value));
-  const minute = computed(() => minuteRotation(clock.value));
-  const second = computed(() => secondRotation(clock.value));
-  const subsecond = computed(() => subsecondRotation(clock.value));
-
-  return { hour, minute, second, subsecond };
-};
-
-// Wall-clock HH:MM:SS at quarter-minute boundaries, for announcements.
-// Quantizing to 15-second steps is what keeps the live region from
-// announcing, and being spoken, on every single second.
+// Quarter-minute steps keep screen-reader announcements from chattering.
 export const formatTime = (secondsSinceMidnight: number) => {
   const quantized = Math.floor(secondsSinceMidnight / 15) * 15;
   const hours = Math.floor(quantized / 3600) % 12;
@@ -108,4 +125,27 @@ export const formatTime = (secondsSinceMidnight: number) => {
   const formattedMinutes = String(minutes).padStart(2, '0');
   const formattedSeconds = String(seconds).padStart(2, '0');
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+};
+
+// One clock's hand fractions, derived from the shared instant.
+export const createTime = (zone: () => string) => {
+  const clock = computed(() => zonedParts(now.value, zone()).wallSeconds);
+
+  return {
+    get hour() {
+      return hourFraction(clock.value);
+    },
+    get minute() {
+      return minuteFraction(clock.value);
+    },
+    get second() {
+      return secondFraction(clock.value);
+    },
+    get subsecond() {
+      return subsecondFraction(clock.value);
+    },
+    get zone() {
+      return zone();
+    },
+  };
 };
