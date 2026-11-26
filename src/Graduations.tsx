@@ -3,7 +3,7 @@ import { clockGraduationId, rotate, seconds } from '#src/common';
 import { getTestId } from '#src/utilities';
 
 export const Graduations = () =>
-  Array.from(Array(seconds).keys(), (index) => ({
+  Array.from(Array(seconds).keys(), index => ({
     index,
     isHour: index % 5 === 0,
   })).map(({ index, isHour }) => (

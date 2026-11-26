@@ -3,7 +3,7 @@ import { defineConfig, mergeConfig } from 'vitest/config';
 
 import viteConfig from '#/vite.config';
 
-export default defineConfig((env) =>
+export default defineConfig(env =>
   mergeConfig(
     viteConfig(env),
     defineConfig({
@@ -16,8 +16,16 @@ export default defineConfig((env) =>
           screenshotFailures: false,
         },
         coverage: {
-          exclude: ['src/index.css'],
+          exclude: ['**/*.svg', 'src/index.css'],
+          thresholds: {
+            branches: 100,
+            functions: 100,
+            lines: 100,
+            statements: 100,
+          },
         },
+        // Browser mode ignores the jsdom environment default.
+        environment: 'node',
       },
     }),
   ),

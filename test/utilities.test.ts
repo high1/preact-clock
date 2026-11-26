@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { getTestId } from '#src/utilities';
+import { cx, getTestId, requireElement } from '#src/utilities';
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -13,8 +13,7 @@ describe('getTestId', () => {
     expect(getTestId('test')).toBeUndefined();
   });
 
-  // Production is the mode that matters: this is where the attribute must not
-  // reach the DOM at all.
+  // Production must never expose the attribute in the DOM.
   test('returns undefined in production builds', () => {
     vi.stubEnv('MODE', 'production');
 
@@ -25,5 +24,30 @@ describe('getTestId', () => {
     vi.stubEnv('MODE', 'test');
 
     expect(getTestId('test')).toBe('test');
+  });
+});
+
+describe('cx', () => {
+  test('joins class names with spaces', () => {
+    expect(cx('relative', 'flex', 'items-center')).toBe(
+      'relative flex items-center',
+    );
+  });
+
+  test('skips falsy parts', () => {
+    expect(cx('relative', false, null, undefined, 'flex')).toBe(
+      'relative flex',
+    );
+  });
+});
+
+describe('requireElement', () => {
+  test('returns the element', () => {
+    const element = document.createElement('div');
+    expect(requireElement(element, 'listbox')).toBe(element);
+  });
+
+  test('throws when the element is missing', () => {
+    expect(() => requireElement(null, 'trigger')).toThrow('Missing trigger');
   });
 });

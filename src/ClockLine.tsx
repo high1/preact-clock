@@ -16,8 +16,8 @@ export const ClockLine = ({
   ...rest
 }: ClockLineProps) => (
   <line
-    stroke-linecap="round"
     {...rest}
+    stroke-linecap="round"
     y1={graduation && length - limit}
     y2={-(graduation ? limit : length)}
   />

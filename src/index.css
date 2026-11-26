@@ -3,3 +3,9 @@
 @theme {
   --color-preact: #673ab8;
 }
+
+@custom-variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+}
